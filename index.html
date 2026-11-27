@@ -1,0 +1,1233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blood Bank Management System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8b4c8, #c7b6ff, #a8d8ff);
+    color: #302b42;
+    padding: 20px;
+}
+
+/* Background decoration */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    z-index: -1;
+}
+
+body::before {
+    background: #ff526f;
+    top: -80px;
+    left: -80px;
+}
+
+body::after {
+    background: #8065ff;
+    bottom: -80px;
+    right: -80px;
+}
+
+/* Main container */
+.container {
+    max-width: 1250px;
+    margin: auto;
+}
+
+/* Header */
+header {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 22px;
+    padding: 22px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 0 8px 30px rgba(70,40,100,0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #ff416c, #e60045);
+    color: white;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+}
+
+.logo h1 {
+    font-size: 21px;
+    color: #382b48;
+}
+
+.logo p {
+    font-size: 12px;
+    color: #776b89;
+    margin-top: 4px;
+}
+
+.header-tag {
+    background: rgba(255,255,255,0.5);
+    padding: 10px 18px;
+    border-radius: 30px;
+    color: #d92e58;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+nav button {
+    border: 1px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(15px);
+    color: #51445f;
+    padding: 12px 17px;
+    border-radius: 13px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav button:hover,
+nav button.active {
+    background: linear-gradient(135deg, #ff416c, #e60045);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Glass panels */
+.glass {
+    background: rgba(255,255,255,0.38);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.55);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 8px 30px rgba(70,40,100,0.09);
+    margin-bottom: 20px;
+}
+
+.page {
+    display: none;
+    animation: appear 0.35s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-title {
+    margin-bottom: 20px;
+}
+
+.section-title h2 {
+    font-size: 25px;
+    color: #392b4b;
+    margin-bottom: 6px;
+}
+
+.section-title p {
+    color: #776b89;
+    font-size: 14px;
+}
+
+/* Dashboard cards */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 17px;
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 18px;
+    padding: 22px;
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(70,40,100,0.12);
+}
+
+.stat-icon {
+    font-size: 25px;
+    margin-bottom: 13px;
+}
+
+.stat-card h3 {
+    font-size: 28px;
+    color: #e52e5b;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 13px;
+    color: #776b89;
+}
+
+/* Blood group cards */
+.blood-groups {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 13px;
+}
+
+.blood-card {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 15px;
+    text-align: center;
+    padding: 18px;
+}
+
+.blood-card h3 {
+    color: #e52e5b;
+    font-size: 24px;
+    margin-bottom: 7px;
+}
+
+.blood-card p {
+    font-size: 13px;
+    color: #776b89;
+}
+
+/* Forms */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #51445f;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid rgba(120,90,150,0.18);
+    border-radius: 11px;
+    background: rgba(255,255,255,0.65);
+    outline: none;
+    color: #392b4b;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus {
+    border-color: #e52e5b;
+    box-shadow: 0 0 0 3px rgba(229,46,91,0.1);
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.btn {
+    background: linear-gradient(135deg, #ff416c, #e60045);
+    border: none;
+    color: white;
+    padding: 13px 20px;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(230,0,69,0.25);
+}
+
+.btn-delete {
+    background: #6e5b80;
+    padding: 8px 12px;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #4e3d60;
+}
+
+/* Tables */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th {
+    background: rgba(229,46,91,0.1);
+    color: #a51e48;
+    padding: 14px;
+    text-align: left;
+    font-size: 13px;
+}
+
+td {
+    padding: 13px 14px;
+    border-bottom: 1px solid rgba(120,90,150,0.13);
+    font-size: 13px;
+    color: #51445f;
+}
+
+tr:hover td {
+    background: rgba(255,255,255,0.3);
+}
+
+.status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.good {
+    background: #d7f8e4;
+    color: #16834a;
+}
+
+.warning {
+    background: #fff0c7;
+    color: #9a6900;
+}
+
+.expired {
+    background: #ffdce3;
+    color: #bd2449;
+}
+
+/* Search */
+.search-box {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-box input,
+.search-box select {
+    flex: 1;
+    min-width: 180px;
+}
+
+.result-box {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 13px;
+    background: rgba(255,255,255,0.5);
+    color: #51445f;
+    line-height: 1.7;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #776b89;
+    font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .blood-groups {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        padding: 17px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card h3 {
+        font-size: 23px;
+    }
+
+    nav button {
+        flex: 1;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .glass {
+        padding: 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">🩸</div>
+        <div>
+            <h1>BloodCare</h1>
+            <p>Blood Bank Donor & Inventory System</p>
+        </div>
+    </div>
+
+    <div class="header-tag">❤️ Save Lives, Donate Blood</div>
+</header>
+
+<nav>
+    <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+    <button onclick="showPage('donors',this)">Donors</button>
+    <button onclick="showPage('donations',this)">Donations</button>
+    <button onclick="showPage('inventory',this)">Inventory</button>
+    <button onclick="showPage('requests',this)">Requests</button>
+    <button onclick="showPage('search',this)">Availability</button>
+</nav>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+
+    <div class="section-title">
+        <h2>Welcome to BloodCare 👋</h2>
+        <p>Manage donors, donations and blood inventory in one place.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <h3 id="totalDonors">0</h3>
+            <p>Registered Donors</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🩸</div>
+            <h3 id="totalDonations">0</h3>
+            <p>Total Donations</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">❤️</div>
+            <h3 id="totalUnits">0</h3>
+            <p>Available Units</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <h3 id="totalRequests">0</h3>
+            <p>Blood Requests</p>
+        </div>
+    </div>
+
+    <div class="glass">
+        <div class="section-title">
+            <h2>Blood Group Availability</h2>
+            <p>Current available units by blood group.</p>
+        </div>
+
+        <div class="blood-groups" id="bloodGroupCards"></div>
+    </div>
+
+    <div class="glass">
+        <div class="section-title">
+            <h2>About BloodCare</h2>
+            <p>A simple system to organize blood bank information.</p>
+        </div>
+        <p style="line-height:1.8;color:#655875;">
+            BloodCare helps maintain donor details, donation history,
+            blood inventory, expiry information and blood requests.
+            It makes it easier to search for blood group availability
+            when there is an urgent requirement.
+        </p>
+    </div>
+</section>
+
+<!-- DONORS -->
+<section id="donors" class="page">
+
+    <div class="section-title">
+        <h2>👥 Donor Management</h2>
+        <p>Register and manage blood donor information.</p>
+    </div>
+
+    <div class="glass">
+        <h3 style="margin-bottom:20px;">Register New Donor</h3>
+
+        <form id="donorForm" class="form-grid">
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="donorName" placeholder="Enter donor name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="donorPhone" placeholder="Enter phone number"
+                pattern="[0-9]{10}" maxlength="10" required>
+            </div>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="donorAge" min="18" max="100"
+                placeholder="Enter age" required>
+            </div>
+
+            <div class="form-group">
+                <label>Blood Group</label>
+                <select id="donorGroup" required>
+                    <option value="">Select blood group</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select>
+            </div>
+
+            <div class="form-group full">
+                <label>Address</label>
+                <input type="text" id="donorAddress" placeholder="Enter address" required>
+            </div>
+
+            <div class="form-group full">
+                <button class="btn" type="submit">+ Register Donor</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="glass">
+        <div class="section-title">
+            <h2>Registered Donors</h2>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Age</th>
+                        <th>Blood Group</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="donorTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- DONATIONS -->
+<section id="donations" class="page">
+
+    <div class="section-title">
+        <h2>🩸 Donation Management</h2>
+        <p>Record blood donations from registered donors.</p>
+    </div>
+
+    <div class="glass">
+        <h3 style="margin-bottom:20px;">Record New Donation</h3>
+
+        <form id="donationForm" class="form-grid">
+
+            <div class="form-group">
+                <label>Select Donor</label>
+                <select id="donationDonor" required>
+                    <option value="">Select donor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Donation Date</label>
+                <input type="date" id="donationDate" required>
+            </div>
+
+            <div class="form-group full">
+                <button type="submit" class="btn">+ Record Donation</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="glass">
+        <div class="section-title">
+            <h2>Donation History</h2>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Blood Group</th>
+                        <th>Donation Date</th>
+                    </tr>
+                </thead>
+                <tbody id="donationTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- INVENTORY -->
+<section id="inventory" class="page">
+
+    <div class="section-title">
+        <h2>📦 Blood Inventory</h2>
+        <p>Manage blood units and monitor their expiry dates.</p>
+    </div>
+
+    <div class="glass">
+        <h3 style="margin-bottom:20px;">Add Blood Units</h3>
+
+        <form id="inventoryForm" class="form-grid">
+
+            <div class="form-group">
+                <label>Blood Group</label>
+                <select id="inventoryGroup" required>
+                    <option value="">Select blood group</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Number of Units</label>
+                <input type="number" id="inventoryUnits" min="1"
+                placeholder="Enter units" required>
+            </div>
+
+            <div class="form-group">
+                <label>Collection Date</label>
+                <input type="date" id="collectionDate" required>
+            </div>
+
+            <div class="form-group full">
+                <button type="submit" class="btn">+ Add to Inventory</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="glass">
+        <div class="section-title">
+            <h2>Blood Stock Details</h2>
+            <p>Demo expiry calculation: 35 days after collection.</p>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Blood Group</th>
+                        <th>Units</th>
+                        <th>Collection Date</th>
+                        <th>Demo Expiry Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- REQUESTS -->
+<section id="requests" class="page">
+
+    <div class="section-title">
+        <h2>📋 Blood Requests</h2>
+        <p>Record blood requirements from hospitals and patients.</p>
+    </div>
+
+    <div class="glass">
+        <h3 style="margin-bottom:20px;">Create Blood Request</h3>
+
+        <form id="requestForm" class="form-grid">
+
+            <div class="form-group">
+                <label>Hospital / Patient Name</label>
+                <input type="text" id="requestName"
+                placeholder="Enter name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Contact Number</label>
+                <input type="tel" id="requestPhone"
+                pattern="[0-9]{10}" maxlength="10"
+                placeholder="Enter phone number" required>
+            </div>
+
+            <div class="form-group">
+                <label>Required Blood Group</label>
+                <select id="requestGroup" required>
+                    <option value="">Select blood group</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Required Units</label>
+                <input type="number" id="requestUnits"
+                min="1" placeholder="Enter units" required>
+            </div>
+
+            <div class="form-group full">
+                <label>Urgency</label>
+                <select id="requestUrgency" required>
+                    <option value="Normal">Normal</option>
+                    <option value="Urgent">Urgent</option>
+                    <option value="Emergency">Emergency</option>
+                </select>
+            </div>
+
+            <div class="form-group full">
+                <button type="submit" class="btn">+ Submit Request</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="glass">
+        <div class="section-title">
+            <h2>Request History</h2>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Blood Group</th>
+                        <th>Units</th>
+                        <th>Urgency</th>
+                    </tr>
+                </thead>
+                <tbody id="requestTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- AVAILABILITY -->
+<section id="search" class="page">
+
+    <div class="section-title">
+        <h2>🔍 Blood Availability</h2>
+        <p>Search available blood units by blood group.</p>
+    </div>
+
+    <div class="glass">
+        <h3 style="margin-bottom:20px;">Find Available Blood</h3>
+
+        <div class="search-box">
+            <select id="searchGroup">
+                <option value="">Select blood group</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+            </select>
+
+            <button class="btn" onclick="searchBlood()">Search Blood</button>
+        </div>
+
+        <div id="searchResult" class="result-box">
+            Select a blood group to check availability.
+        </div>
+    </div>
+</section>
+
+<footer>
+    BloodCare © 2026 | Blood Bank Donor & Inventory Management System
+</footer>
+
+</div>
+
+<script>
+// Load saved data from localStorage
+let donors = JSON.parse(localStorage.getItem("bc_donors")) || [];
+let donations = JSON.parse(localStorage.getItem("bc_donations")) || [];
+let inventory = JSON.parse(localStorage.getItem("bc_inventory")) || [];
+let requests = JSON.parse(localStorage.getItem("bc_requests")) || [];
+
+const groups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+
+// Save all data
+function saveData() {
+    localStorage.setItem("bc_donors", JSON.stringify(donors));
+    localStorage.setItem("bc_donations", JSON.stringify(donations));
+    localStorage.setItem("bc_inventory", JSON.stringify(inventory));
+    localStorage.setItem("bc_requests", JSON.stringify(requests));
+}
+
+// Escape user-entered text before displaying it in HTML
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+// Navigation
+function showPage(pageId, button) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    document.querySelectorAll("nav button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    renderAll();
+}
+
+// Get today's date
+function today() {
+    return new Date().toISOString().split("T")[0];
+}
+
+// Calculate expiry date for demonstration
+function getExpiryDate(date) {
+    const expiry = new Date(date + "T00:00:00");
+    expiry.setDate(expiry.getDate() + 35);
+    return expiry.toISOString().split("T")[0];
+}
+
+// Calculate available units for a blood group
+function availableUnits(group) {
+    const currentDate = today();
+
+    return inventory
+        .filter(item => {
+            const expiry = getExpiryDate(item.date);
+            return item.group === group && expiry >= currentDate;
+        })
+        .reduce((total, item) => total + Number(item.units), 0);
+}
+
+// REGISTER DONOR
+document.getElementById("donorForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const donor = {
+        id: Date.now(),
+        name: document.getElementById("donorName").value.trim(),
+        phone: document.getElementById("donorPhone").value.trim(),
+        age: document.getElementById("donorAge").value,
+        group: document.getElementById("donorGroup").value,
+        address: document.getElementById("donorAddress").value.trim()
+    };
+
+    if (donor.age < 18) {
+        alert("Donor must be at least 18 years old.");
+        return;
+    }
+
+    donors.push(donor);
+
+    saveData();
+    this.reset();
+    renderAll();
+
+    alert("Donor registered successfully!");
+});
+
+// DELETE DONOR
+function deleteDonor(id) {
+    if (!confirm("Are you sure you want to delete this donor?")) return;
+
+    donors = donors.filter(donor => donor.id !== id);
+
+    saveData();
+    renderAll();
+}
+
+// REGISTER DONATION
+document.getElementById("donationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const donorId = Number(document.getElementById("donationDonor").value);
+    const donor = donors.find(item => item.id === donorId);
+    const date = document.getElementById("donationDate").value;
+
+    if (!donor) {
+        alert("Please select a valid donor.");
+        return;
+    }
+
+    if (date > today()) {
+        alert("Donation date cannot be in the future.");
+        return;
+    }
+
+    // Demo interval check: 90 days
+    const previous = donations
+        .filter(item => item.donorId === donorId)
+        .sort((a, b) => b.date.localeCompare(a.date))[0];
+
+    if (previous) {
+        const previousDate = new Date(previous.date + "T00:00:00");
+        const currentDate = new Date(date + "T00:00:00");
+        const days = Math.floor((currentDate - previousDate) / 86400000);
+
+        if (days < 90) {
+            alert("Demo rule: at least 90 days must pass between recorded donations.");
+            return;
+        }
+    }
+
+    donations.push({
+        id: Date.now(),
+        donorId: donor.id,
+        name: donor.name,
+        group: donor.group,
+        date: date
+    });
+
+    // Add one demo unit to inventory
+    inventory.push({
+        id: Date.now() + 1,
+        group: donor.group,
+        units: 1,
+        date: date
+    });
+
+    saveData();
+    this.reset();
+    renderAll();
+
+    alert("Donation recorded and one demo unit added to inventory!");
+});
+
+// ADD INVENTORY
+document.getElementById("inventoryForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const group = document.getElementById("inventoryGroup").value;
+    const units = Number(document.getElementById("inventoryUnits").value);
+    const date = document.getElementById("collectionDate").value;
+
+    if (date > today()) {
+        alert("Collection date cannot be in the future.");
+        return;
+    }
+
+    inventory.push({
+        id: Date.now(),
+        group: group,
+        units: units,
+        date: date
+    });
+
+    saveData();
+    this.reset();
+    renderAll();
+
+    alert("Blood units added successfully!");
+});
+
+// DELETE INVENTORY ENTRY
+function deleteInventory(id) {
+    if (!confirm("Delete this inventory entry?")) return;
+
+    inventory = inventory.filter(item => item.id !== id);
+
+    saveData();
+    renderAll();
+}
+
+// SUBMIT BLOOD REQUEST
+document.getElementById("requestForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const request = {
+        id: Date.now(),
+        name: document.getElementById("requestName").value.trim(),
+        phone: document.getElementById("requestPhone").value.trim(),
+        group: document.getElementById("requestGroup").value,
+        units: Number(document.getElementById("requestUnits").value),
+        urgency: document.getElementById("requestUrgency").value
+    };
+
+    requests.push(request);
+
+    saveData();
+    this.reset();
+    renderAll();
+
+    alert("Blood request recorded successfully!");
+});
+
+// SEARCH BLOOD
+function searchBlood() {
+    const group = document.getElementById("searchGroup").value;
+    const result = document.getElementById("searchResult");
+
+    if (!group) {
+        result.innerHTML = "Please select a blood group.";
+        return;
+    }
+
+    const units = availableUnits(group);
+
+    result.innerHTML = `
+        <h3 style="color:#e52e5b;">${escapeHTML(group)} Blood Group</h3>
+        <h2 style="font-size:32px;margin:10px 0;">${units} Units</h2>
+        <p>${units > 0
+            ? "Demo inventory shows units available. Confirm compatibility and stock with blood-bank staff."
+            : "No unexpired demo inventory units found for this group."}</p>
+    `;
+}
+
+// RENDER DONORS
+function renderDonors() {
+    const table = document.getElementById("donorTable");
+
+    table.innerHTML = donors.map(donor => `
+        <tr>
+            <td>${escapeHTML(donor.name)}</td>
+            <td>${escapeHTML(donor.phone)}</td>
+            <td>${escapeHTML(donor.age)}</td>
+            <td>${escapeHTML(donor.group)}</td>
+            <td>${escapeHTML(donor.address)}</td>
+            <td>
+                <button class="btn-delete" onclick="deleteDonor(${donor.id})">Delete</button>
+            </td>
+        </tr>
+    `).join("") || `<tr><td colspan="6">No donors registered yet.</td></tr>`;
+
+    const select = document.getElementById("donationDonor");
+    const oldValue = select.value;
+
+    select.innerHTML = `<option value="">Select donor</option>` +
+        donors.map(donor => `
+            <option value="${donor.id}">
+                ${escapeHTML(donor.name)} (${escapeHTML(donor.group)})
+            </option>
+        `).join("");
+
+    if (donors.some(donor => String(donor.id) === oldValue)) {
+        select.value = oldValue;
+    }
+}
+
+// RENDER DONATIONS
+function renderDonations() {
+    const table = document.getElementById("donationTable");
+
+    table.innerHTML = donations.map(item => `
+        <tr>
+            <td>${escapeHTML(item.name)}</td>
+            <td>${escapeHTML(item.group)}</td>
+            <td>${escapeHTML(item.date)}</td>
+        </tr>
+    `).join("") || `<tr><td colspan="3">No donations recorded yet.</td></tr>`;
+}
+
+// RENDER INVENTORY
+function renderInventory() {
+    const table = document.getElementById("inventoryTable");
+
+    table.innerHTML = inventory.map(item => {
+        const expiry = getExpiryDate(item.date);
+        const currentDate = today();
+
+        let status = "";
+        let statusClass = "";
+
+        if (expiry < currentDate) {
+            status = "Expired";
+            statusClass = "expired";
+        } else {
+            const remaining = Math.ceil(
+                (new Date(expiry + "T00:00:00") -
+                new Date(currentDate + "T00:00:00")) / 86400000
+            );
+
+            if (remaining <= 7) {
+                status = "Expiring Soon";
+                statusClass = "warning";
+            } else {
+                status = "Available";
+                statusClass = "good";
+            }
+        }
+
+        return `
+            <tr>
+                <td>${escapeHTML(item.group)}</td>
+                <td>${escapeHTML(item.units)}</td>
+                <td>${escapeHTML(item.date)}</td>
+                <td>${escapeHTML(expiry)}</td>
+                <td><span class="status ${statusClass}">${status}</span></td>
+                <td>
+                    <button class="btn-delete" onclick="deleteInventory(${item.id})">Delete</button>
+                </td>
+            </tr>
+        `;
+    }).join("") || `<tr><td colspan="6">No inventory records found.</td></tr>`;
+}
+
+// RENDER REQUESTS
+function renderRequests() {
+    const table = document.getElementById("requestTable");
+
+    table.innerHTML = requests.map(request => `
+        <tr>
+            <td>${escapeHTML(request.name)}</td>
+            <td>${escapeHTML(request.phone)}</td>
+            <td>${escapeHTML(request.group)}</td>
+            <td>${escapeHTML(request.units)}</td>
+            <td>${escapeHTML(request.urgency)}</td>
+        </tr>
+    `).join("") || `<tr><td colspan="5">No requests recorded yet.</td></tr>`;
+}
+
+// RENDER DASHBOARD
+function renderDashboard() {
+    document.getElementById("totalDonors").textContent = donors.length;
+    document.getElementById("totalDonations").textContent = donations.length;
+
+    document.getElementById("totalUnits").textContent =
+        inventory.reduce((total, item) => {
+            if (getExpiryDate(item.date) >= today()) {
+                return total + Number(item.units);
+            }
+            return total;
+        }, 0);
+
+    document.getElementById("totalRequests").textContent = requests.length;
+
+    document.getElementById("bloodGroupCards").innerHTML =
+        groups.map(group => `
+            <div class="blood-card">
+                <h3>${group}</h3>
+                <p>${availableUnits(group)} Units Available</p>
+            </div>
+        `).join("");
+}
+
+// RENDER EVERYTHING
+function renderAll() {
+    renderDonors();
+    renderDonations();
+    renderInventory();
+    renderRequests();
+    renderDashboard();
+}
+
+// Initial setup
+document.getElementById("donationDate").max = today();
+document.getElementById("collectionDate").max = today();
+
+renderAll();
+</script>
+
+</body>
+</html>
